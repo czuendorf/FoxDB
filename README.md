@@ -55,8 +55,8 @@ For the Storage of your `cars` entity you need of course a table in your MySQL d
 
 FoxDB assumes that a MySQL table exists, which is called like the entity you want to manage. For each property of your command, you need  one according column in your table.
 
-Store an entity
----------------
+Storing an entity
+-----------------
 
 Assuming you want to create a web application for managing your cars:
 
@@ -67,23 +67,45 @@ Assuming you want to create a web application for managing your cars:
         }
     };
 
-You could use jQuery for storing your `cars` entity via AJAX.
+You could use jQuery for storing your `cars` entity via an AJAX call using the `PUT` method.
 
     $.ajax({
-        url: serverURL + "/put",
+        url: "http://localhost/foxdb/",
         dataType: 'json',
         data: JSON.stringify(entity),
         type: "PUT",
-        dataType: 'json',
-        success: function(result) {
-            console.log("success");
-        },
-        fail: function(result) {
-            console.log("fail");
-        }
+        dataType: 'json'
     });
 
 After this AJAX call your entity should be stored in your MySQL `cars` table.
+
+Deleting an entity
+------------------
+
+Deleting an entity is quite as easy as storing one. If you want to delete all entities with a specific brand you could do it like that.
+
+First you will be to defined which entities should be deleted. You can select a subset through the properties of your column.
+You could use the `id`, the `brand` or its `type` for sub-selecting.
+
+In this case we will sub-select through the property `brand` which should be `Honda`:
+
+    var targets = {
+        "cars": {
+            "brand" : "Honda"
+        }
+    };
+
+Then we will pass this JSON map through an AJAX call again, using the `DELETE` method:
+
+    $.ajax({
+        url: "http://localhost/foxdb/",
+        dataType: 'json',
+        data: JSON.stringify(targets),
+        type: "DELETE",
+        dataType: 'json'
+    });
+
+If you check your MySQL again, the previously stored Honda entity should be removed.
 
 Contributing
 ------------
