@@ -21,7 +21,6 @@ $app = new \Slim\Slim();
  * Step 3: Define the Slim application routes
  */
 
-
 /**
 * Get Database connection.
 */
@@ -48,15 +47,14 @@ function displayError($message) {
     echo '{"error":{"text":'. $message .'}}';
 }
 
-// POST route
-
 /**
 * Updates a json entity:
-* post
-* {"car": {
-*            "id": "1",
-*            "color": "blue"
-*        }
+*
+* {
+*    "car": {
+*            "brand": "Honda",
+*            "type": "Civic"
+*           }
 * }
 */
 $app->post('/', function () {
@@ -97,8 +95,10 @@ $app->post('/', function () {
     }
 });
 
-// GET route
-$app->get('/get/:entity/id', function ($entity) {
+/**
+* Get the highest used entity id.
+*/
+$app->get('/:entity/id', function ($entity) {
     $db = getConnection();
     $sql = "SELECT MAX(id) as id FROM ".$entity;
     try {
@@ -113,8 +113,10 @@ $app->get('/get/:entity/id', function ($entity) {
     }
 });
 
-// GET route
-$app->get('/get/:entity', function ($entity) {
+/**
+* Gets all entities.
+*/
+$app->get('/:entity', function ($entity) {
     $db = getConnection();
     $sql = "SELECT * FROM ".$entity;
     try {
@@ -129,8 +131,10 @@ $app->get('/get/:entity', function ($entity) {
     }
 });
 
-// PUT route
-$app->put('/put', function () {
+/**
+* Stores an entity.
+*/
+$app->put('/', function () {
     $app = \Slim\Slim::getInstance();
   
     $data = json_decode($app->request()->getBody(),true);
@@ -168,8 +172,10 @@ $app->put('/put', function () {
 
 });
 
-// DELETE route
-$app->delete('/delete', function () {
+/**
+* Deletes an entity.
+*/
+$app->delete('/', function () {
     $app = \Slim\Slim::getInstance();
   
     $data = json_decode($app->request()->getBody(),true);
@@ -210,8 +216,5 @@ $app->delete('/delete', function () {
 
 /**
  * Step 4: Run the Slim application
- *
- * This method should be called last. This executes the Slim application
- * and returns the HTTP response to the HTTP client.
  */
 $app->run();
